@@ -1,0 +1,26 @@
+{
+  "name": "ranking-candidates-universities-2023-2024",
+  "version": "1.0.0",
+  "description": "",
+  "main": "algorithm.mjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nikola-Velikov/ranking-candidates-universities-2023-2024.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Nikola-Velikov/ranking-candidates-universities-2023-2024/issues"
+  },
+  "homepage": "https://github.com/Nikola-Velikov/ranking-candidates-universities-2023-2024#readme",
+  "dependencies": {
+    "FileWriter": "^0.10.0",
+    "fs": "^0.0.1-security",
+    "fs-extra": "^11.2.0",
+    "write-file": "^1.0.0",
+    "xlsx": "^0.18.5"
+  }
+}
