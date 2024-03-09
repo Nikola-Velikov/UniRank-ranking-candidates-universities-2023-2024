@@ -2,16 +2,22 @@
 import * as XLSX from "./node_modules/xlsx/xlsx.mjs";
 
 document.getElementById("file-upload").addEventListener("change", converter);
+document.getElementById("min-score").addEventListener("click", selectMinScore)
 
-let result = {};
-
+let minScore = 9
+function selectMinScore(e){
+  console.log(e.target);
+let current_score = Number(document.getElementById("score").value)
+  if(typeof current_score === "number"){
+    minScore = current_score
+    console.log(minScore);
+  }
+}
 //converter
 async function converter(e) {
+  let result = {};
   localStorage.clear();
-  let uni = "";
-  const firstFile = e.target.files[0];
 
-  const secondFile = e.target.files[1];
   console.log(e.target.files);
   for (let file of e.target.files) {
     if (file.name.includes(".xls")) {
@@ -102,7 +108,7 @@ async function converter(e) {
     );
     if (
       first_university.free_places > 0 &&
-      student.firstScore >= 9 &&
+      student.firstScore >= minScore &&
       !filter.includes(true)
     ) {
       first_university.free_places -= 1;
@@ -163,7 +169,7 @@ async function converter(e) {
     );
     if (
       student.secondScore &&
-      student.secondScore >= 9 &&
+      student.secondScore >= minScore &&
       !filter.includes(true)
     ) {
       second_university = universitiesData.find(
@@ -221,7 +227,7 @@ async function converter(e) {
     universitiesData.forEach((e) =>
       e.accepted.forEach((y) => filter.push(y.UIN == student.UIN))
     );
-    if (student.thirdScore && student.thirdScore >= 9 && !filter.includes(true)) {
+    if (student.thirdScore && student.thirdScore >= minScore && !filter.includes(true)) {
       third_university = universitiesData.find(
         (e) => e.course_id == student.course_id3
       );
@@ -265,7 +271,7 @@ async function converter(e) {
     universitiesData.forEach((e) =>
       e.accepted.forEach((y) => filter.push(y.UIN == student.UIN))
     );
-    if (student.forthScore && student.forthScore >= 9 && !filter.includes(true)) {
+    if (student.forthScore && student.forthScore >= minScore && !filter.includes(true)) {
       forth_university = universitiesData.find(
         (e) => e.course_id == student.course_id4
       );
@@ -308,7 +314,7 @@ async function converter(e) {
     universitiesData.forEach((e) =>
       e.accepted.forEach((y) => filter.push(y.UIN == student.UIN))
     );
-    if (student.fifthScore && student.fifthScore >= 9 && !filter.includes(true)) {
+    if (student.fifthScore && student.fifthScore >= minScore && !filter.includes(true)) {
       fifth_university = universitiesData.find(
         (e) => e.course_id == student.course_id5
       );
