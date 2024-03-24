@@ -46,11 +46,14 @@
           <img id="file-image" src="#" alt="Preview" class="hidden">
           <div id="start">
             <i class="fa fa-download" aria-hidden="true"></i>
-            <div>Файловете трябва да са тип .json, .xls или .xlsx </div>
+           <b> <div id="file-title">Моля, изберете файла с кандидат-студентите</div></b>
            
-            <span id="file-upload-btn" class="btn btn-primary">Изберете 2 файла</span>
+            <span id="file-upload-btn" class="btn btn-primary">Изберете файла</span>
+            
+            <span id="error"></span>
           </div>
-          <p>За изход софтуерът връща csv файл с класираните кандидати</p>
+          
+          <p class="output">За изход софтуерът връща csv файл с класираните кандидати</p>
         </label>
           
       </form>
@@ -60,7 +63,7 @@
    
     
     <div class="accordion" id="accordionExample">
-    <h3 class="filter-header">Филтрирайте вашия резултат</h1>
+    <h3 class="filter-header">Допълнителни критерии за филтриране на списъците</h1>
       <div class="accordion-item">
         <h2 class="accordion-header">
           <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
@@ -77,6 +80,8 @@
             <div class="col-auto">
               <label for="score" class="visually-hidden">Минимален бал</label>
               <input type="text" class="form-control" id="score" placeholder="Минимален бал" value="9">
+              <span id="filter-error"></span>
+
             </div>
             <div class="col-auto">
               <button id="min-score"  class="btn btn-primary mb-3">Потвърди промяна</button>

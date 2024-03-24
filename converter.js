@@ -3,22 +3,39 @@ import * as XLSX from "./node_modules/xlsx/xlsx.mjs";
 
 document.getElementById("file-upload").addEventListener("change", converter);
 document.getElementById("min-score").addEventListener("click", selectMinScore)
-
+localStorage.clear()
+//min score filter
 let minScore = 9
+
+
 function selectMinScore(e){
+
   console.log(e.target);
-let current_score = Number(document.getElementById("score").value)
-  if(typeof current_score === "number"){
+let current_score = Number(document.getElementById("score").value) 
+  if (!current_score){
+    
+    document.getElementById('filter-error').textContent = 'Моля, въведете число'
+    
+  }
+  else if(typeof current_score === "number"){
     minScore = current_score
     console.log(minScore);
+    document.getElementById('filter-error').textContent = ''
+
   }
 }
-//converter
-async function converter(e) {
-  let result = {};
-  localStorage.clear();
 
-  console.log(e.target.files);
+//converter
+let result = {};
+async function converter(e) {
+  
+
+
+
+  if (e.target.files.length > 1){
+    document.getElementById('error').textContent = 'Моля, изберете само един файл.'
+
+  }else{
   for (let file of e.target.files) {
     if (file.name.includes(".xls")) {
       let convertedJSON;
@@ -36,26 +53,57 @@ async function converter(e) {
         convertedJSON = JSON.stringify(data, undefined, 4);
       });
       console.log(convertedJSON);
+      
 
-      if (JSON.parse(convertedJSON)[0].UIN) {
+      if (JSON.parse(convertedJSON)[0].UIN && document.getElementById('file-title').textContent == 'Моля, изберете файла с кандидат-студентите') {
+        let exampleJSON = JSON.parse(convertedJSON)[0]
+        if (exampleJSON.UIN && exampleJSON.firstScore 
+          && exampleJSON.course_id1&& exampleJSON.secondScore
+          && exampleJSON.course_id2&& exampleJSON.thirdScore
+          && exampleJSON.course_id3&& exampleJSON.forthScore
+          && exampleJSON.course_id4&& exampleJSON.fifthScore
+          && exampleJSON.course_id5){
+
+            localStorage.setItem('student-file',JSON.parse(convertedJSON).length)
+            result["studentsData"] = JSON.parse(convertedJSON);
+            console.log(result);
+            document.getElementById('file-title').textContent = 'Моля, изберете файла с Висшите училища'
+            document.getElementById('error').textContent = ''
+          }else {
+            document.getElementById('error').textContent = 'Невалидно наименувани колони във файла.'
+          }
         //localStorage.setItem('studentsData',convertedJSON)
         //setData('studentsData',convertedJSON)
-        result["studentsData"] = JSON.parse(convertedJSON);
-        console.log(result);
       }
-      if (JSON.parse(convertedJSON)[0].speciality) {
-        let uniData = [];
+      
+      else if (JSON.parse(convertedJSON)[0].speciality && document.getElementById('file-title').textContent == 'Моля, изберете файла с Висшите училища') {
+        
+        let exampleJSON = JSON.parse(convertedJSON)[0]
+        if (exampleJSON.speciality && exampleJSON.free_places 
+          && exampleJSON.university&& exampleJSON.course_id
+          && exampleJSON.university_id){
+            let uniData = [];
         for (let uni of JSON.parse(convertedJSON)) {
           uni.accepted = [];
           uniData.push(uni);
+          document.getElementById('error').textContent = ''
+
         }
-
-        // setData('uniData',uniData)
-
         result["uniData"] = uniData;
-        //localStorage.setItem('uniData',JSON.stringify(uniData))
+        localStorage.setItem('university-file',uniData.length)
+
+          }else{
+        document.getElementById('error').textContent = 'Невалидно наименувани колони във файла.'
+
+          }
 
         console.log(result);
+      }else{
+        document.getElementById('error').textContent = 'Невалидно наименувани колони във файла.'
+      }
+      if (result.studentsData && result.uniData){
+        algorithm(result)
+        result = {}
       }
     }
     if (file.name.includes(".json")) {
@@ -83,6 +131,10 @@ async function converter(e) {
       }
     }
   }
+}
+  function algorithm(result){
+
+  
   console.log(result);
   let studentsData = result.studentsData
   let universitiesData = result.uniData
@@ -354,6 +406,7 @@ async function converter(e) {
       }
     }
   }
+  let acceptedStudents = 0;
   let ranked=""
   ranked+=
     "course_id, speciality, university, university_id, announced_places, free_places, UIN\n";
@@ -363,6 +416,7 @@ async function converter(e) {
   );
   universitiesData.forEach((uni) =>
     uni.accepted.forEach(st =>{
+      acceptedStudents+=1
       ranked+=
       
         `${uni.course_id}, ${uni.speciality}, ${uni.university}, ${
@@ -373,17 +427,22 @@ async function converter(e) {
     }
     )
   );
+  localStorage.setItem('acceptedStudents', acceptedStudents)
+  localStorage.setItem('ranked', ranked)
   console.log(ranked);
 
   universitiesData.forEach((uni) => console.log(uni));
   const link = document.createElement("a");
     
          const file = new Blob([ new Uint8Array([0xEF, 0xBB, 0xBF]),ranked], { type: 'text/csv;charset=utf-8' });
-         link.href = URL.createObjectURL(file);
+        localStorage.setItem('downloadFile',file)
+        link.href = '/download-file.html'
+        link.click()
+       /*  link.href = URL.createObjectURL(file);
          console.log(file);
          link.download = "result.csv";
          link.click();
-         URL.revokeObjectURL(link.href);
+         URL.revokeObjectURL(link.href);*/
          
 }
-
+}

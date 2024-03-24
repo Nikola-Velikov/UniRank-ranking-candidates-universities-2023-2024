@@ -95,7 +95,7 @@ p {
 }
 .uploader .btn {
   display: inline-block;
-  margin: 0.5rem 0.5rem 1rem 0.5rem;
+  margin: 0.5rem 0.5rem 0.3rem 0.5rem;
   clear: both;
   font-family: inherit;
   font-weight: 700;
@@ -114,6 +114,7 @@ p {
   background: #454cad;
   border-color: #454cad;
   cursor: pointer;
+  text-align: center
 }
 
 .container {
@@ -214,6 +215,25 @@ label {
 }
 #score{
   text-align: center;
+}
+
+#error{
+  color: red;
+  font-size: 14px;
+  display: block;
+  margin-bottom: 10px;
+  
+}
+
+#filter-error{
+  color: red;
+  font-size: 14px;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.output{
+  margin-top: 10px;
 }
 @media (width<1750px) {
   .json-info p {
