@@ -101,10 +101,7 @@ async function converter(e) {
       }else{
         document.getElementById('error').textContent = 'Невалидно наименувани колони във файла.'
       }
-      if (result.studentsData && result.uniData){
-        algorithm(result)
-        result = {}
-      }
+      
     }
     if (file.name.includes(".json")) {
       const fileReader = new FileReader();
@@ -113,24 +110,54 @@ async function converter(e) {
 
       let binaryData = fileReader.result;
       binaryData = JSON.parse(binaryData);
-      if (binaryData[0].UIN) {
-        localStorage.setItem("studentsData", JSON.stringify(binaryData));
+      if (binaryData[0].UIN && document.getElementById('file-title').textContent == 'Моля, изберете файла с кандидат-студентите') {
+        let exampleJSON = binaryData[0]
+        if (exampleJSON.UIN && exampleJSON.firstScore 
+          && exampleJSON.course_id1&& exampleJSON.secondScore
+          && exampleJSON.course_id2&& exampleJSON.thirdScore
+          && exampleJSON.course_id3&& exampleJSON.forthScore
+          && exampleJSON.course_id4&& exampleJSON.fifthScore
+          && exampleJSON.course_id5){
+        localStorage.setItem("student-file", binaryData.length);
 
         result["studentsData"] = binaryData;
-        console.log(result);
+        document.getElementById('file-title').textContent = 'Моля, изберете файла с Висшите училища'
+        document.getElementById('error').textContent = ''
+        }else {
+        document.getElementById('error').textContent = 'Невалидно наименувани колони във файла.'
       }
-      if (binaryData[0].speciality) {
+    }
+      else if (binaryData[0].speciality && document.getElementById('file-title').textContent == 'Моля, изберете файла с Висшите училища') {
+       let exampleJSON = binaryData[0]
+        if (exampleJSON.speciality && exampleJSON.free_places 
+          && exampleJSON.university&& exampleJSON.course_id
+          && exampleJSON.university_id){
         let uniData = [];
         for (let uni of binaryData) {
           uni.accepted = [];
           uniData.push(uni);
         }
-        localStorage.setItem("uniData", JSON.stringify(uniData));
+        document.getElementById('error').textContent = ''
+        localStorage.setItem("university-file", uniData.length);
 
         result["uniData"] = uniData;
       }
-    }
-  }
+      else{
+      document.getElementById('error').textContent = 'Невалидно наименувани колони във файла.'
+
+        }
+    }else{
+        document.getElementById('error').textContent = 'Невалидно наименувани колони във файла.'
+
+          }
+      
+          
+        }
+      }
+      if (result.studentsData && result.uniData){
+        algorithm(result)
+        result = {}
+      }
 }
   function algorithm(result){
 
