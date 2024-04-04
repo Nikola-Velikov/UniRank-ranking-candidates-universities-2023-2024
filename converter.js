@@ -5,7 +5,7 @@ document.getElementById("file-upload").addEventListener("change", converter);
 document.getElementById("min-score").addEventListener("click", selectMinScore)
 localStorage.clear()
 //min score filter
-let minScore = 9
+let minfilterScore = 9
 
 
 function selectMinScore(e){
@@ -18,8 +18,8 @@ let current_score = Number(document.getElementById("score").value)
     
   }
   else if(typeof current_score === "number"){
-    minScore = current_score
-    console.log(minScore);
+    minfilterScore = current_score
+    console.log(minfilterScore);
     document.getElementById('filter-error').textContent = ''
 
   }
@@ -193,7 +193,7 @@ function addStudent(student) {
 let filter = []
 universitiesData.forEach((e) =>
 e.accepted.forEach(y=>filter.push(y.UIN==student.UIN)));
-  if (first_university.free_places > 0 && student.firstScore >= 9&& !filter.includes(true))
+  if (first_university.free_places > 0 && student.firstScore >= minfilterScore&& !filter.includes(true))
  {
     first_university.free_places -= 1;
  
@@ -261,7 +261,7 @@ universitiesData.forEach((e) =>
 e.accepted.forEach(y=>filter.push(y.UIN==student.UIN)));
   if (
     student.secondScore &&
-    student.secondScore >= 9 &&
+    student.secondScore >= minfilterScore &&
     !filter.includes(true)
   ) {
     second_university = universitiesData.find(
@@ -335,7 +335,7 @@ for (const st of sts) {
   e.accepted.forEach(y=>filter.push(y.UIN==student.UIN)));
   if (
     student.thirdScore &&
-    student.thirdScore >= 9 &&
+    student.thirdScore >= minfilterScore &&
     !filter.includes(true)
     )
    {
@@ -407,7 +407,7 @@ for (const st of sts) {
   e.accepted.forEach(y=>filter.push(y.UIN==student.UIN)));
   if (
     student.forthScore &&
-    student.forthScore >= 9 &&
+    student.forthScore >= minfilterScore &&
     !filter.includes(true)
   ) {
     forth_university = universitiesData.find(
@@ -475,7 +475,7 @@ for (const st of sts) {
   e.accepted.forEach(y=>filter.push(y.UIN==student.UIN)));
   if (
     student.fifthScore &&
-    student.fifthScore >= 9 && !filter.includes(true)
+    student.fifthScore >= minfilterScore && !filter.includes(true)
   ) {
     fifth_university = universitiesData.find(
       (e) => e.course_id == student.course_id5
